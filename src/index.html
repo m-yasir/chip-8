@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chip-8</title>
+  <!-- Favicon -->
+  <link rel="icon" href="../public/favicon.png" type="image/x-icon">
+  <!-- External deps -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="m-0 ml-4">
+  <header class="flex mt-4 mb-4">
+    <h1 class="text-3xl">Chip-8 Emulator</h1>
+  </header>
+  <main>
+    <!-- Upload rom form -->
+    <div class="flex flex-col">
+      <label for="rom" class="text-lg">Upload a ROM</label>
+      <input type="file" id="rom" name="rom" accept=".ch8" class="mt-2">
+    </div>
+    <div class="flex mt-4">
+      <!-- Chip-8 viewport -->
+      <div class="flex justify-center mt-4">
+        <canvas id="viewport" width="640" height="320"></canvas>
+      </div>
+    </div>
+    <h1 class="text-xl font-semibold">
+      Program instructions display
+    </h1>
+    <div id="log">
+    </div>
+  </main>
+  <script src="./index.js" rel="text/javascript"></script>
+</body>
+
+</html>
