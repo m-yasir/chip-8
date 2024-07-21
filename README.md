@@ -13,4 +13,4 @@ To run the emulator, clone the repository and open the `index.html` file in your
 ## References used
 
 - [Cowgod's Chip-8 Technical Reference](http://devernay.free.fr/hacks/chip8/C8TECH10.HTM)
-- [Tobi's Chip-8 Technical Reference](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/)
+- [Tobias' Chip-8 Guide](https://tobiasvl.github.io/blog/write-a-chip-8-emulator/)
