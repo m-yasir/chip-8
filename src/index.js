@@ -12,6 +12,33 @@ const programCounter = 0x200;
 
 const indexRegister = 0;
 
+const fontSet = [
+  new Uint8Array([0xf0, 0x90, 0x90, 0x90, 0xf0]), // 0
+  new Uint8Array([0x20, 0x60, 0x20, 0x20, 0x70]), // 1
+  new Uint8Array([0xf0, 0x10, 0xf0, 0x80, 0xf0]), // 2
+  new Uint8Array([0xf0, 0x10, 0xf0, 0x10, 0xf0]), // 3
+  new Uint8Array([0x90, 0x90, 0xf0, 0x10, 0x10]), // 4
+  new Uint8Array([0xf0, 0x80, 0xf0, 0x10, 0xf0]), // 5
+  new Uint8Array([0xf0, 0x80, 0xf0, 0x90, 0xf0]), // 6
+  new Uint8Array([0xf0, 0x10, 0x20, 0x40, 0x40]), // 7
+  new Uint8Array([0xf0, 0x90, 0xf0, 0x90, 0xf0]), // 8
+  new Uint8Array([0xf0, 0x90, 0xf0, 0x10, 0xf0]), // 9
+  new Uint8Array([0xf0, 0x90, 0xf0, 0x90, 0x90]), // A
+  new Uint8Array([0xe0, 0x90, 0xe0, 0x90, 0xe0]), // B
+  new Uint8Array([0xf0, 0x80, 0x80, 0x80, 0xf0]), // C
+  new Uint8Array([0xe0, 0x90, 0x90, 0x90, 0xe0]), // D
+  new Uint8Array([0xf0, 0x80, 0xf0, 0x80, 0xf0]), // E
+  new Uint8Array([0xf0, 0x80, 0xf0, 0x80, 0x80]), // F
+];
+
+function loadFontSet() {
+  let i = 0x50;
+  for (const font of fontSet) {
+    programMemory.set(font, i);
+    i += font.length;
+  }
+}
+
 function pairWise(arr) {
   return arr.reduce((acc, curr, i) => {
     if (i % 2 === 0) {
@@ -21,14 +48,13 @@ function pairWise(arr) {
   }, []);
 }
 
-document.getElementById("rom").addEventListener("change", readRom);
+document.getElementById("rom").addEventListener("change", loadROM);
 
-let instructions;
-
-async function readRom(event) {
+async function loadROM(event) {
   const rom = event.target.files[0];
   console.log("Reading ROM file...");
 
+  let instructions;
   try {
     const bytes = await rom.arrayBuffer().then((buffer) => {
       return new Uint8Array(buffer);
@@ -58,10 +84,23 @@ async function readRom(event) {
 
   console.log("ROM loaded into memory");
 
-  // Execute instructions
+  console.log("Initializing program...");
 
-  for (let i = 0; i < instructions.length; i++) {
-    execute(instructions[i]);
+  console.log("Loading font set into memory...");
+  loadFontSet();
+  console.log("Font set loaded into memory");
+
+  // Execute program
+  executeProgram();
+}
+
+function executeProgram() {
+  console.log("Executing program...");
+
+  while (true) {
+    const instruction =
+      (programMemory[programCounter] << 8) | programMemory[programCounter + 1];
+    execute(instruction);
   }
 }
 
@@ -81,7 +120,7 @@ function execute(instruction) {
     setRegister((instruction & 0x0f00) >> 8, instruction & 0x00ff);
   }
 
-  if ((instruction & 0xf000) === 0xA000) {
+  if ((instruction & 0xf000) === 0xa000) {
     setIndexRegister(instruction & 0x0fff);
   }
 
@@ -159,9 +198,9 @@ function add(registerIndex, value) {
 function skipIfEqual(registerIndex, value) {
   // Skip next instruction if register value is equal to value
   console.log(
-    `Skip next instruction if register V${registerIndex} is equal to ${value.toString(
-      16
-    ).toUpperCase()}`
+    `Skip next instruction if register V${registerIndex} is equal to ${value
+      .toString(16)
+      .toUpperCase()}`
   );
   if (registers[registerIndex] === value) {
     programCounter += 2;
@@ -171,9 +210,9 @@ function skipIfEqual(registerIndex, value) {
 function skipIfNotEqual(registerIndex, value) {
   // Skip next instruction if register value is not equal to value
   console.log(
-    `Skip next instruction if register V${registerIndex} is not equal to ${value.toString(
-      16
-    ).toUpperCase()}`
+    `Skip next instruction if register V${registerIndex} is not equal to ${value
+      .toString(16)
+      .toUpperCase()}`
   );
   if (registers[registerIndex] !== value) {
     programCounter += 2;
