@@ -8,9 +8,9 @@ const stack = new Uint16Array(16);
 
 const registers = new Uint8Array(16);
 
-const programCounter = 0x200;
+let programCounter = 0x200;
 
-const indexRegister = 0;
+let indexRegister = 0;
 
 const fontSet = [
   new Uint8Array([0xf0, 0x90, 0x90, 0x90, 0xf0]), // 0
