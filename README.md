@@ -1,4 +1,4 @@
-# Chip-8 Emulator
+# [WIP] Chip-8 Emulator
 
 ## Introduction
 
